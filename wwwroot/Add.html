@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Details</title>
+</head>
+<body>
+    <div>
+        Add Plant
+        <input type="text" id="name" />
+        <button onclick="addPlant()">Add</button>
+    </div>
+    <div>
+        Add Device
+        <div>
+            <button onclick="getPlant()">Get Plants</button>
+        </div>
+
+        <div id="device">
+            <div>
+                Device Name <input id="DeviceName" type="text" />
+            </div>
+            <div>
+                Parmeters <input id="Parmeters" type="text" />
+            </div>
+            <div>
+                Lower Threshold  <input id="LowerThreshold" type="number" />
+            </div>
+            <div>
+                Upper Threshold <input id="UpperThreshold" type="number" />
+            </div>
+            <div>
+                Plant
+                <select id="plantSelect">
+                    <option>Select</option>
+                </select>
+            </div>
+            <button onclick="addDevice()">Add Device</button>
+        </div>
+    </div>
+    <div>
+        Add Reading
+        <div>
+            <button onclick="getDevices()">Get Device</button>
+        </div>
+        <div>
+            Unit Reading <input type="text" id="reading" />
+        </div>
+        <div>
+            Plant
+            <select id="deviceSelect">
+                <option>Select</option>
+            </select>
+        </div>
+        <div>
+            <button onclick="addReading()">Add Reading</button>
+        </div>
+    </div>
+    <script>
+        function addReading() {
+            var data = {
+                UnitReading: getValue('reading'),
+                DeviceId: getValue('deviceSelect'),
+                Time: new Date()
+            }
+
+            fetch('/api/Alerts/AddReading', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then((res) => console.log(res));
+        }
+        function getDevices() {
+            fetch('/api/Alerts/GetDevices')
+                .then(res => res.json())
+                .then(res => addSelectOptions(res, 'deviceSelect'));
+        }
+
+        function addPlant() {
+            var name = getValue('name');
+            if (name != '') {
+                fetch('/api/Alerts/AddPlant', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(name),
+                })
+                    .then((res) => console.log(res));
+            }
+
+        }
+
+        function getPlant() {
+            fetch('/api/Alerts/GetPlants')
+                .then(res => res.json())
+                .then(res => addSelectOptions(res, 'plantSelect'));
+        }
+
+        function addSelectOptions(list, id) {
+            var select = document.getElementById(id);
+            for (var i = 0; i < list.length; i++) {
+                var opt = document.createElement('option');
+                opt.value = list[i].id;
+                opt.innerHTML = list[i].plantName || list[i].deviceName;
+                select.appendChild(opt)
+            }
+        }
+        function addDevice() {
+            var data = {
+                DeviceName: getValue('DeviceName'),
+                Parmeters: getValue('Parmeters'),
+                LowerThreshold: getValue('LowerThreshold'),
+                UpperThreshold: getValue('UpperThreshold'),
+                PlantId: getValue('plantSelect')
+            }
+
+            fetch('/api/Alerts/AddDevice', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then((res) => console.log(res));
+        }
+
+        function getValue(id) {
+            var ele = document.getElementById(id);
+            return ele.value;
+        }
+    </script>
+</body>
+</html>

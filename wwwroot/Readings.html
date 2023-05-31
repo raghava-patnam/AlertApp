@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Readings</title>
+    <style>
+        .Adjust {
+            padding-left: 50px;
+            position: relative;
+            bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <span>
+            Unit Reading : <input type="text" id="reading" />
+        </span>
+        <span>
+            Device :
+            <select id="deviceSelect">
+                <option>Select</option>
+            </select>
+        </span>
+        <span>
+            <button onclick="addReading()">Add Reading</button>
+        </span>
+    </div>
+    <div id="container">
+
+    </div>
+    <script>
+        let Devices = [];
+        
+        function getDevices() {
+            fetch('/api/Alerts/GetDevices')
+                .then(res => res.json())
+                .then(res => {
+                    Devices = res;
+                    addSelectOptions(res, 'deviceSelect')
+                    let container = document.getElementById('container');
+                    res.forEach(e => {
+                        container.innerHTML += `
+                            <div id=${e.deviceName.replace(/\s/g, "")}>
+                                <span class="Adjust">${e.deviceName}</span>
+                                <span>
+                                    <svg height="100" width="100">
+                                        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="green" />
+                                        <title>${e.deviceName}</title>
+                                    </svg>
+                                </span>
+                            </div>
+                            `
+                    })
+                });
+        }
+
+        function getAlerts() {
+            fetch('/api/Alerts/GetAlerts')
+                .then(res => res.json())
+                .then(res => {
+                    Devices.forEach(e => {
+                        if (e.id == res.deviceId) {
+                            let device = document.querySelector(`#${e.deviceName.replace(/\s/g, "")} circle`);
+                            if (res.unitReading < e.lowerThreshold || res.unitReading > e.upperThreshold) {
+                                device.setAttribute("fill", 'red');
+                            } else {
+                                device.setAttribute("fill", 'green')
+                            }
+                        }
+                    })
+                });
+        }
+
+        function addSelectOptions(list, id) {
+            var select = document.getElementById(id);
+            for (var i = 0; i < list.length; i++) {
+                var opt = document.createElement('option');
+                opt.value = list[i].id;
+                opt.innerHTML = list[i].plantName || list[i].deviceName;
+                select.appendChild(opt)
+            }
+        }
+
+        function addReading() {
+            var data = {
+                UnitReading: getValue('reading'),
+                DeviceId: getValue('deviceSelect'),
+                Time: new Date()
+            }
+
+            fetch('/api/Alerts/AddReading', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then((res) => console.log(res));
+        }
+
+        function getValue(id) {
+            var ele = document.getElementById(id);
+            return ele.value;
+        }
+
+        getDevices();
+
+        setInterval(() => {
+            getAlerts();
+        }, 1000);
+    </script>
+</body>
+</html>
