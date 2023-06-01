@@ -5,7 +5,7 @@
 </head>
 <body>
     <div>
-        Add Plant
+        Add Plant, Name:
         <input type="text" id="name" />
         <button onclick="addPlant()">Add</button>
     </div>
@@ -13,47 +13,28 @@
         Add Device
         <div>
             <button onclick="getPlant()">Get Plants</button>
-        </div>
-
-        <div id="device">
-            <div>
-                Device Name <input id="DeviceName" type="text" />
-            </div>
-            <div>
-                Parmeters <input id="Parmeters" type="text" />
-            </div>
-            <div>
-                Lower Threshold  <input id="LowerThreshold" type="number" />
-            </div>
-            <div>
-                Upper Threshold <input id="UpperThreshold" type="number" />
-            </div>
-            <div>
-                Plant
-                <select id="plantSelect">
-                    <option>Select</option>
-                </select>
-            </div>
+            Device Name : <input id="DeviceName" type="text" />
+            , Parmeters : <input id="Parmeters" type="text" />
+            , Lower Threshold : <input id="LowerThreshold" type="number" />
+            , Upper Threshold : <input id="UpperThreshold" type="number" />
+            , Plant
+            <select id="plantSelect">
+                <option>Select</option>
+            </select>
             <button onclick="addDevice()">Add Device</button>
         </div>
+        
     </div>
     <div>
         Add Reading
         <div>
             <button onclick="getDevices()">Get Device</button>
-        </div>
-        <div>
-            Unit Reading <input type="text" id="reading" />
-        </div>
-        <div>
-            Plant
+            Unit Reading : <input type="text" id="reading" />
+            , Device
             <select id="deviceSelect">
                 <option>Select</option>
             </select>
-        </div>
-        <div>
             <button onclick="addReading()">Add Reading</button>
-        </div>
     </div>
     <script>
         function addReading() {
