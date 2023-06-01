@@ -5,7 +5,7 @@
 </head>
 <body>
     <div>
-        Add Plant, Name:
+        Add Plant
         <input type="text" id="name" />
         <button onclick="addPlant()">Add</button>
     </div>
@@ -13,26 +13,45 @@
         Add Device
         <div>
             <button onclick="getPlant()">Get Plants</button>
-            Device Name : <input id="DeviceName" type="text" />
-            , Parmeters : <input id="Parmeters" type="text" />
-            , Lower Threshold : <input id="LowerThreshold" type="number" />
-            , Upper Threshold : <input id="UpperThreshold" type="number" />
-            , Plant
-            <select id="plantSelect">
-                <option>Select</option>
-            </select>
+        </div>
+
+        <div id="device">
+            <div>
+                Device Name <input id="DeviceName" type="text" />
+            </div>
+            <div>
+                Parmeters <input id="Parmeters" type="text" />
+            </div>
+            <div>
+                Lower Threshold  <input id="LowerThreshold" type="number" />
+            </div>
+            <div>
+                Upper Threshold <input id="UpperThreshold" type="number" />
+            </div>
+            <div>
+                Plant
+                <select id="plantSelect">
+                    <option>Select</option>
+                </select>
+            </div>
             <button onclick="addDevice()">Add Device</button>
-        </div>        
+        </div>
     </div>
     <div>
         Add Reading
         <div>
             <button onclick="getDevices()">Get Device</button>
-            Unit Reading : <input type="text" id="reading" />
-            , Device
+        </div>
+        <div>
+            Unit Reading <input type="text" id="reading" />
+        </div>
+        <div>
+            Plant
             <select id="deviceSelect">
                 <option>Select</option>
             </select>
+        </div>
+        <div>
             <button onclick="addReading()">Add Reading</button>
         </div>
     </div>
